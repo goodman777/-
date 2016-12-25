@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+    <body>
+	请看源代码
+        <div id="A">
+            <div id="B">
+                <div id="E"></div>
+                <div id="F">
+                    <div id="K"></div>
+                    <div id="L"></div>
+                    <div id="N">
+                        <div id="R"></div>
+                        <div id="S"></div>
+                        <div id="T"></div>
+                    </div>
+                </div>
+                <div id="G"></div>
+            </div>
+            <div id="C"></div>
+            <div id="D">
+                <div id="H">
+                    <div id="O"></div>
+                    <div id="P"></div>
+                    <div id="Q"></div>
+                </div>
+                <div id="I"></div>
+                <div id="J"></div>
+            </div>
+        </div>
+        
+    </body>
+    <script>
+        //用html的结构模拟了题中的节点结构，其中节点名称是id表示的
+        //总的思想是获取两个节点的最近的相同父节点
+        //细节处理，输出顺序
+
+
+        //传入节点的id，获取该元素的所有父节点，将其放入一个数组
+        function GetParentNode(str){
+            var arr=[];
+            var boxOne=document.getElementById(str);
+            if(boxOne.parentNode.tagName!='BODY'){
+                arr.push(boxOne.parentNode.id);
+                var arr1=GetParentNode(boxOne.parentNode.id);
+                arr=arr.concat(arr1);
+            }else{
+                arr.push(boxOne.parentNode.tagName);
+            }
+            return arr;
+        }
+        //分两种情况
+        //1、若节点1直接在节点2的父节点当中
+        //2、节点1不在节点2的父节点当中，两者拥有共同的父节点
+        function GetPath(str1,str2){
+            var arr1=GetParentNode(str1);
+            var arr2=GetParentNode(str2);
+            var len1=arr1.length;
+            var arr3=[];
+            if(arr2.indexOf(str1)==-1){
+                for(var i=0;i<len1;i++){
+                    if(arr2.indexOf(arr1[i])!=-1){
+                        var arr4=arr2.slice(0,arr2.indexOf(arr1[i]));
+                        var arr5=arr1.slice(0,i+1);
+                        arr4=arr4.reverse();
+                        arr3=arr5.concat(arr4);
+                        arr3.unshift(str1);
+                        arr3.push(str2);
+                        return arr3;
+                    }
+                }
+            }else{
+                arr3=arr2.slice(0,arr2.indexOf(str1));
+                arr3=arr3.reverse();
+                arr3.unshift(str1);
+                arr3.push(str2);
+                return arr3;
+            }
+            
+        }
+        var arr=GetPath('G','R');
+        alert(arr);
+        
+    </script>
+</html>
